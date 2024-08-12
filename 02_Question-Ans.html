@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get User Names using Fetch API</title>
+</head>
+<body>
+    <h1>User Names</h1>
+    <button id="fetchUsersButton">Get User Names</button>
+    <ul id="userNamesList"></ul>
+
+    <script>
+        // Function to fetch user names and log them to the console
+        function fetchUserNames() {
+            // Fetch data using the Fetch API
+            fetch('https://jsonplaceholder.typicode.com/users')
+                .then(response => {
+                    // Check if the response was successful (status 200)
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    // Parse the JSON data
+                    return response.json();
+                })
+                .then(users => {
+                    // Extract the names of the users
+                    const userNames = users.map(user => user.name);
+
+                    // Log the user names to the browser console
+                    console.log('User Names:', userNames);
+
+                    // Display the user names in a readable format
+                    const userNamesList = document.getElementById('userNamesList');
+                    userNamesList.innerHTML = ''; // Clear any previous list items
+
+                    userNames.forEach((name, index) => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${index + 1}. ${name}`;
+                        userNamesList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    // Log any error that occurs during the fetch operation
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+        // Add an event listener to the button to fetch user names on click
+        document.getElementById('fetchUsersButton').addEventListener('click', fetchUserNames);
+    </script>
+</body>
+</html>
